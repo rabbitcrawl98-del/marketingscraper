@@ -908,6 +908,17 @@ async def serve_admin_panel() -> FileResponse:
     return HTMLResponse("<h1>Zenmark Apex Outbound Dashboard not found.</h1>")
 
 
+@app.get("/api")
+async def api_root_status() -> Dict[str, Any]:
+    return {
+        "status": "online",
+        "service": "Zenmark Apex Outbound v16.0 Sovereign Titan",
+        "version": "16.0.0",
+        "platform": "Vercel Serverless",
+        "domain": "marketingscraper.vercel.app",
+    }
+
+
 @app.get("/health")
 async def health_check() -> Dict[str, Any]:
     return {

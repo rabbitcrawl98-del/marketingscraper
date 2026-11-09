@@ -1,0 +1,16 @@
+Dockerfile
+docker-compose.yml
+render.yaml
+Procfile
+searxng/
+tests/
+scripts/
+sql/
+workflows/
+.antigravityrules
+*.db
+*.db-shm
+*.db-wal
+zenmark_sovereign_vault.db
+zenmark_sent_vault_ledger.json
+zenmark_local_store.json
