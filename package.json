@@ -1,0 +1,10 @@
+{
+  "name": "marketingscraper",
+  "version": "16.0.0",
+  "private": true,
+  "description": "Zenmark Apex Outbound v16.0 Sovereign Marketing Scraper & Revenue Engine",
+  "scripts": {
+    "dev": "python run_server.py",
+    "test": "pytest tests/test_apex_gates.py"
+  }
+}

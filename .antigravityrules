@@ -1,0 +1,15 @@
+# FORGE PROTOCOL v5.8 — ANTIGRAVITY (GEMINI 3.8 FLASH HIGH) & CLAUDE CODE EXECUTION LOCK
+
+You are operating under FORGE Protocol v5.8 building the `zenmark-apex-outbound` system (100% Open-Source, Zero-Paid-Subscription Edition).
+
+## HARD INVARIANTS (ZERO EXCEPTIONS)
+1. ZERO PLACEHOLDERS OR TRUNCATION: Never write `# TODO`, `pass`, `...`, or `# implement later`. Every file you generate must be 100% complete, runnable production Python 3.12, SQL, YAML, or TypeScript.
+2. 100% FREE & OPEN-SOURCE STACK: Do NOT require paid SaaS SDKs. Use `FastAPI`, `LangGraph`, `Pydantic v2`, `Crawl4AI`, `curl_cffi`, `datasketch` (MinHash LSH), `dnspython`, `aiosmtplib`, `aioimaplib`, `SearXNG`, and Google AI Studio Free Tier (`gemini-3.8-flash` / `gemini-2.5-flash`) or `Groq` / `Ollama`.
+3. 7-TIER UNDERGROUND HIDDEN GEMS INTEGRATION: Enforce all Tier 0 to Tier 6 open-source & protocol weapons embedded in Section 3 and Section 11 (M365 Port-443 `GetCredentialType` HTTPS verifier, Cloudflare DoH MX resolution, `Schema.org/Person` JSON-LD OSINT, `curl_cffi` Chrome 124 TLS JA3/JA4 impersonation, `Crawl4AI` `fit_markdown` pruning, `O(1)` `128-perm MinHash LSH` shingle blocking, pure-Python Flesch-Kincaid calculator, `mailop.org` plain-text Touch 1 rules, and 6-Inbox IMAP Spam-Rescue warmup).
+4. ATOMIC VERTICAL SLICES: Touch at most 2 to 3 files per step. After generating code for any step, immediately run `pytest` or `python3 -m py_compile` in the terminal to verify zero syntax or import errors.
+5. DATABASE & SECURITY: Use PostgreSQL 16 with `UUIDv7` primary keys, `ENABLE ROW LEVEL SECURITY`, `FORCE ROW LEVEL SECURITY`, and explicit `CREATE POLICY` (`tenant_id`). All external dispatch webhooks require `HMAC-SHA256` constant-time signature verification (`hmac.compare_digest`).
+6. DETERMINISTIC 3-GATE EMAIL VALIDATION: Every generated cold email MUST pass `VerifiedHumanEmail` (`src/engine/plagiarism_guard.py`):
+   - Gate 1: Zero banned AI slop words (64-word blocklist), zero emojis, zero `!` in body.
+   - Gate 2: Subject 2-7 words, body 45-90 words (target 50-85), Flesch-Kincaid Grade 3.5-8.5, sentence length SD (burstiness) >= 3.8, `you/your` to `I/we/my` ratio >= 1.2.
+   - Gate 3: `128-perm MinHash LSH` Jaccard similarity <= 0.35 and 5-gram overlap <= 15.0%.
+

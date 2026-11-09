@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: zenmark-apex-outbound
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn src.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: APP_ENV
+        value: production
+      - key: SMTP_HOST
+        value: api.brevo.com
+      - key: SMTP_PORT
+        value: "443"
+      - key: SMTP_EMAIL
+        value: zenmarkteam@outlook.com
+      - key: SMTP_APP_PASSWORD
+        sync: false
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: TELEGRAM_CHAT_ID
+        value: "6748746712"
+      - key: HITL_HMAC_SECRET
+        generateValue: true

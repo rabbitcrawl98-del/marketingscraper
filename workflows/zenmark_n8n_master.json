@@ -1,0 +1,192 @@
+{
+  "name": "Zenmark Apex Outbound & Dual-Brother Revenue Engine (v5.8 Master)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "zenmark-trigger-discovery",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "1",
+      "name": "Webhook Trigger: Inbound Niche Sprint",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [220, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://fastapi_app:8000/api/v1/discover/run",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"keyword\": \"{{ $json.body.keyword }}\",\n  \"country_code\": \"{{ $json.body.country_code || 'US' }}\",\n  \"city\": \"{{ $json.body.city || '' }}\",\n  \"min_active_ads\": 3\n}",
+        "options": {}
+      },
+      "id": "2",
+      "name": "FastAPI: 100% Free Client Discovery & OSINT",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [440, 300]
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "leads",
+        "options": {}
+      },
+      "id": "3",
+      "name": "Item Lists: Split Leads Array",
+      "type": "n8n-nodes-base.itemLists",
+      "typeVersion": 1,
+      "position": [660, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.email_status }}",
+              "operation": "equal",
+              "value2": "VALID"
+            }
+          ]
+        }
+      },
+      "id": "4",
+      "name": "Filter: Verified Zero-Bounce Only",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [880, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://fastapi_app:8000/api/v1/campaigns/generate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"lead\": {\n    \"company_name\": \"{{ $json.company_name }}\",\n    \"domain\": \"{{ $json.domain }}\",\n    \"region\": \"{{ $json.country_code || 'US' }}\",\n    \"first_name\": \"{{ $json.first_name }}\",\n    \"last_name\": \"{{ $json.last_name }}\",\n    \"email\": \"{{ $json.email }}\",\n    \"phone_whatsapp\": \"{{ $json.phone_whatsapp }}\",\n    \"linkedin_url\": \"{{ $json.linkedin_url }}\"\n  },\n  \"active_meta_ads_count\": {{ $json.active_ads_count || 3 }},\n  \"ad_summary\": \"{{ $json.ad_type }}\"\n}",
+        "options": {}
+      },
+      "id": "5",
+      "name": "FastAPI: LangGraph Pod Copy Generator",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1100, 240]
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $env.TELEGRAM_CHAT_ID }}",
+        "text": "=🛡️ *ZENMARK HITL APPROVAL REQUEST*\n*Prospect:* {{ $json.lead.first_name }} ({{ $json.lead.company_name }})\n*Email:* `{{ $json.lead.email }}`\n*Subject:* `{{ $json.subject }}`\n\n{{ $json.body_text }}\n\n*Gate Status:* {{ $json.is_approved_by_critic ? '✅ 10/10 Human Passed' : '⚠️ Pending' }}",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "6",
+      "name": "Telegram: Send HITL Card to Brother 1 & 2",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [1320, 240]
+    },
+    {
+      "parameters": {
+        "triggerTimes": {
+          "item": [
+            {
+              "mode": "everyHour"
+            }
+          ]
+        }
+      },
+      "id": "7",
+      "name": "Cron: 6-Inbox Warmup & Spam Rescue Tick",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [220, 520]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://fastapi_app:8000/api/v1/warmup/tick",
+        "options": {}
+      },
+      "id": "8",
+      "name": "FastAPI: Trigger Warmup Tick",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [440, 520]
+    }
+  ],
+  "connections": {
+    "Webhook Trigger: Inbound Niche Sprint": {
+      "main": [
+        [
+          {
+            "node": "FastAPI: 100% Free Client Discovery & OSINT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FastAPI: 100% Free Client Discovery & OSINT": {
+      "main": [
+        [
+          {
+            "node": "Item Lists: Split Leads Array",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Item Lists: Split Leads Array": {
+      "main": [
+        [
+          {
+            "node": "Filter: Verified Zero-Bounce Only",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter: Verified Zero-Bounce Only": {
+      "main": [
+        [
+          {
+            "node": "FastAPI: LangGraph Pod Copy Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FastAPI: LangGraph Pod Copy Generator": {
+      "main": [
+        [
+          {
+            "node": "Telegram: Send HITL Card to Brother 1 & 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cron: 6-Inbox Warmup & Spam Rescue Tick": {
+      "main": [
+        [
+          {
+            "node": "FastAPI: Trigger Warmup Tick",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
+

@@ -1,0 +1,74 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: zenmark_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: zenmark_apex
+      POSTGRES_USER: zenmark_admin
+      POSTGRES_PASSWORD: zenmark_secure_password_2026
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./sql/001_init_zenmark_schema.sql:/docker-entrypoint-initdb.d/001_init_zenmark_schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U zenmark_admin -d zenmark_apex"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: zenmark_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+
+  searxng:
+    image: searxng/searxng:latest
+    container_name: zenmark_searxng
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./searxng/settings.yml:/etc/searxng/settings.yml:ro
+    environment:
+      - SEARXNG_BASE_URL=http://localhost:8080/
+
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: zenmark_n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_HOST=localhost
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - NODE_ENV=production
+      - WEBHOOK_URL=http://localhost:5678/
+      - GENERIC_TIMEZONE=Asia/Kolkata
+    volumes:
+      - n8ndata:/home/node/.n8n
+
+  evolution-api:
+    image: atendai/evolution-api:latest
+    container_name: zenmark_evolution_whatsapp
+    restart: unless-stopped
+    ports:
+      - "8082:8080"
+    environment:
+      - SERVER_URL=http://localhost:8082
+      - AUTHENTICATION_API_KEY=zenmark_evolution_secret_2026
+    volumes:
+      - evolution_instances:/evolution/instances
+
+volumes:
+  pgdata:
+  redisdata:
+  n8ndata:
+  evolution_instances:
+
